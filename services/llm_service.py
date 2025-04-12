@@ -6,7 +6,7 @@ from langchain.prompts import PromptTemplate
 from config import OPENAI_API_KEY, LANGCHAIN_MODEL, CATEGORY
 import json
 
-# Initialize the ChatOpenAI LLM
+# temp set to 0 for deterministic output
 llm = ChatOpenAI(
     api_key=OPENAI_API_KEY,
     model_name=LANGCHAIN_MODEL,
