@@ -1,4 +1,3 @@
-# backend/routes/document_route.py
 from flask import Blueprint, request, jsonify
 import logging
 from services import llm_service, qdrant_service
@@ -27,10 +26,7 @@ def process_document():
         created_by = data.get("createdBy")
         
         if not all([document_id, chat_context, user_id, created_by]):
-            return jsonify({
-                "error": "InvalidInput",
-                "message": "필수 필드가 누락되었습니다."
-            }), 400
+            return handle_error("Missing Fields","필수 필드가 누락되었습니다.", 400)
         
         # LLM Call 1: Keyword extraction and category classification
         keywords_category = llm_service.extract_keywords_and_category(chat_context)
@@ -45,7 +41,7 @@ def process_document():
         document_text = summary_doc.get("document")
         summary = summary_doc.get("summary")
         
-        # Qdrant: Chunk the input, generate embeddings, and store the document
+        # Qdrant vector store: Chunk the input, generate embeddings, and store the document
         qdrant_service.store_document_embedding(
             document_id,
             {
@@ -58,7 +54,7 @@ def process_document():
             }
         )
         
-        # Return successful response in the specified JSON format
+        # Return response
         return jsonify({
             "statusCode": 200,
             "message": "성공했습니다",
@@ -73,5 +69,4 @@ def process_document():
         })
     except Exception as e:
         logging.exception("Error processing document")
-        # Use error handler utility to create error response
-        return handle_error("AgentFailed", "LLM 응답 생성에 실패했습니다.", 500)
+        return handle_error("/process-document failed", "LLM 응답 생성에 실패했습니다.", 500)

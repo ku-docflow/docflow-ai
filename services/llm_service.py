@@ -7,7 +7,7 @@ from config import OPENAI_API_KEY, LANGCHAIN_MODEL, CATEGORY
 import json
 
 # temp set to 0 for deterministic output
-llm = ChatOpenAI(
+llm_keyword_category = ChatOpenAI(
     api_key=OPENAI_API_KEY,
     model_name=LANGCHAIN_MODEL,
     temperature=0
@@ -46,7 +46,7 @@ def extract_keywords_and_category(chat_context: str) -> dict:
     
     try:
         # Call the LLM
-        response = llm.invoke(formatted_prompt).content
+        response = llm_keyword_category.invoke(formatted_prompt).content
         
         # Parse the JSON response
         result = json.loads(response)
@@ -55,6 +55,13 @@ def extract_keywords_and_category(chat_context: str) -> dict:
     except Exception as e:
         logging.exception("Error in extract_keywords_and_category")
         raise Exception("LLM 키워드/카테고리 추출 실패") from e
+
+
+llm_summary = ChatOpenAI(
+    api_key=OPENAI_API_KEY,
+    model_name=LANGCHAIN_MODEL,
+    temperature=0.3
+)
 
 def generate_document_summary(chat_context: str, category: str) -> dict:
     """
@@ -96,7 +103,7 @@ def generate_document_summary(chat_context: str, category: str) -> dict:
     
     try:
         # Call the LLM
-        response = llm.invoke(formatted_prompt).content
+        response = llm_summary.invoke(formatted_prompt).content
         result = json.loads(response)
         return result
     except Exception as e:

@@ -11,6 +11,8 @@ QDRANT_PORT = int(os.getenv("QDRANT_PORT", 6333))
 QDRANT_COLLECTION_NAME = os.getenv("QDRANT_COLLECTION_NAME", "documents")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "your-qdrant-api-key")  # Replace with your actual API key
 
+PORT = int(os.getenv("PORT", 8081))
+
 class CATEGORY:
     DEV_DOC = "DEV_DOC"
     MEETING_DOC = "MEETING_DOC"
