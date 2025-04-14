@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 import logging
-from services import llm_service, qdrant_service
+from services import generate_summary, extract_keyword, qdrant_service
 from utils.error_handler import handle_error
 from prompts.prompts import dev_doc_prompt, meeting_doc_prompt
 
@@ -34,17 +34,17 @@ def process_document():
             return handle_error("Missing Fields","필수 필드가 누락되었습니다.", 400)
         
         # LLM Call 1: Keyword extraction and category classification
-        keywords_category = llm_service.extract_keywords_and_category(chat_context)
+        keywords_category = extract_keyword.extract_keywords_and_category(chat_context)
         keywords = keywords_category.get("keywords")
         category = keywords_category.get("category")
 
         print(f"Extracted keywords: {keywords}, Category: {category}")
         
         # Summary는 category에 따라 다르게 생성해야 함. LLM Call 2가 카테고리 에 따라 프롬프트를 다르게 생성해야함
-        
+
 
         # LLM Call 2: Generate summary and document content based on category
-        summary_doc = llm_service.generate_document_summary(chat_context, category)
+        summary_doc = generate_summary.generate_document_summary(chat_context, category)
         title = summary_doc.get("title")
         document_text = summary_doc.get("document")
         summary = summary_doc.get("summary")
