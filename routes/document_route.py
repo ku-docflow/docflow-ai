@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 import logging
 from services import llm_service, qdrant_service
 from utils.error_handler import handle_error
+from prompts.prompts import dev_doc_prompt, meeting_doc_prompt
 
 document_bp = Blueprint("document", __name__)
 
@@ -16,6 +17,7 @@ def process_document():
       "chatContext": "text with chat messages",
       "userId": "user-id",
       "createdBy": "author name"
+      "createdAt": "timestamp"
     }
     """
     try:
@@ -26,6 +28,7 @@ def process_document():
         chat_context = data.get("chatContext")
         user_id = data.get("userId")
         created_by = data.get("createdBy")
+        created_at = data.get("createdAt", None)
         
         if not all([document_id, chat_context, user_id, created_by]):
             return handle_error("Missing Fields","필수 필드가 누락되었습니다.", 400)
@@ -37,6 +40,9 @@ def process_document():
 
         print(f"Extracted keywords: {keywords}, Category: {category}")
         
+        # Summary는 category에 따라 다르게 생성해야 함. LLM Call 2가 카테고리 에 따라 프롬프트를 다르게 생성해야함
+        
+
         # LLM Call 2: Generate summary and document content based on category
         summary_doc = llm_service.generate_document_summary(chat_context, category)
         title = summary_doc.get("title")
@@ -52,7 +58,9 @@ def process_document():
                 "userId": user_id,
                 "createdBy": created_by,
                 "keywords": keywords,
-                "category": category
+                "category": category,
+                "OrganizationId": orangization_id,
+                "createdAt": created_at
             }
         )
         
@@ -67,7 +75,9 @@ def process_document():
                 "document": document_text,
                 "userId": user_id,
                 "createdBy": created_by,
-                "category": category
+                "category": category,
+                "OrganizationId": orangization_id,
+                "CreatedAt": created_at
             }
         })
     except Exception as e:

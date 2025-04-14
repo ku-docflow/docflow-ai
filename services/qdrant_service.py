@@ -21,6 +21,7 @@ def store_document_embedding(document_id: str, payload: Dict) -> None:
             dimensions=1024
         )
         
+
         # Combine title and summary for embedding
         combined_text = f"{payload.get('title', '')} {payload.get('summary', '')}".strip()
         
@@ -37,7 +38,7 @@ def store_document_embedding(document_id: str, payload: Dict) -> None:
         if not client.collection_exists(QDRANT_COLLECTION_NAME):
             client.create_collection(
                 collection_name=QDRANT_COLLECTION_NAME,
-                vectors_config=models.VectorParams(size=1024, distance=models.Distance.DOT_PRODUCT),
+                vectors_config=models.VectorParams(size=1024, distance=models.Distance.DOT),
             )
         
         # Create the point with the required structure
@@ -50,7 +51,9 @@ def store_document_embedding(document_id: str, payload: Dict) -> None:
                 "userId": payload.get("userId"),
                 "createdBy": payload.get("createdBy"),
                 "keywords": payload.get("keywords"),
-                "category": payload.get("category")
+                "category": payload.get("category"),
+                "createdAt": payload.get("createdAt"),
+                "organizationId": payload.get("OrganizationId"),
             }
         )
         
