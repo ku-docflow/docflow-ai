@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 import logging
-from services import generate_summary, extract_keyword, qdrant_service
+from services import generate_document, generate_summary, extract_keyword, qdrant_service
 from utils.error_handler import handle_error
 from prompts.prompts import dev_doc_prompt, meeting_doc_prompt
 
@@ -30,7 +30,7 @@ def process_document():
         created_by = data.get("createdBy")
         created_at = data.get("createdAt", None)
         
-        if not all([document_id, chat_context, user_id, created_by]):
+        if not all([document_id, chat_context, user_id, created_by, created_at]):
             return handle_error("Missing Fields","필수 필드가 누락되었습니다.", 400)
         
         # LLM Call 1: Keyword extraction and category classification
@@ -40,13 +40,20 @@ def process_document():
 
         print(f"Extracted keywords: {keywords}, Category: {category}")
         
-        # Summary는 category에 따라 다르게 생성해야 함. LLM Call 2가 카테고리 에 따라 프롬프트를 다르게 생성해야함
 
+        # LLM Call 2: Generate Document
 
-        # LLM Call 2: Generate summary and document content based on category
+        full_document = generate_document.generate_document(
+            chat_context,
+            category,
+            created_at,
+            created_by,
+            orangization_id
+        )
+
+        # LLM Call 3: Generate summary and document content based on category
         summary_doc = generate_summary.generate_document_summary(chat_context, category)
         title = summary_doc.get("title")
-        document_text = summary_doc.get("document")
         summary = summary_doc.get("summary")
         
         # Qdrant vector store: Chunk the input, generate embeddings, and store the document
@@ -72,12 +79,13 @@ def process_document():
                 "documentId": document_id,
                 "organizationId": orangization_id,
                 "title": title,
-                "document": document_text,
+                "document": full_document,
+                "summary": summary,
                 "userId": user_id,
                 "createdBy": created_by,
                 "category": category,
                 "OrganizationId": orangization_id,
-                "CreatedAt": created_at
+                "createdAt": created_at
             }
         })
     except Exception as e:

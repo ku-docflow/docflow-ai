@@ -7,7 +7,7 @@ from config import OPENAI_API_KEY, LANGCHAIN_MODEL, CATEGORY
 import json
 
 # temp set to 0 for deterministic output
-llm_keyword_category = ChatOpenAI(
+llm = ChatOpenAI(
     api_key=OPENAI_API_KEY,
     model_name=LANGCHAIN_MODEL,
     temperature=0
@@ -46,7 +46,7 @@ def extract_keywords_and_category(chat_context: str) -> dict:
     
     try:
         # Call the LLM
-        response = llm_keyword_category.invoke(formatted_prompt).content
+        response = llm.invoke(formatted_prompt).content
         
         # Parse the JSON response
         result = json.loads(response)

@@ -6,7 +6,7 @@ from config import OPENAI_API_KEY, LANGCHAIN_MODEL, CATEGORY
 import json
 
 
-llm_summary = ChatOpenAI(
+llm = ChatOpenAI(
     api_key=OPENAI_API_KEY,
     model_name=LANGCHAIN_MODEL,
     temperature=0.3
@@ -53,7 +53,7 @@ def generate_document_summary(chat_context: str, category: str) -> dict:
     
     try:
         # Call the LLM
-        response = llm_summary.invoke(formatted_prompt).content
+        response = llm.invoke(formatted_prompt).content
         result = json.loads(response)
         return result
     except Exception as e:
