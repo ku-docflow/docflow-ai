@@ -1,3 +1,4 @@
 .env
 __pycache__
 tempCodeRunnerFile.py
+.pytest_cache__

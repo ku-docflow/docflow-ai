@@ -12,6 +12,7 @@ def process_document():
     Expected JSON payload:
     {
       "documentId": "uuid",
+      "organizationId": "organization-id",
       "chatContext": "text with chat messages",
       "userId": "user-id",
       "createdBy": "author name"
@@ -21,6 +22,7 @@ def process_document():
         # Extract and validate JSON input
         data = request.get_json(force=True)
         document_id = data.get("documentId")
+        orangization_id = data.get("organizationId", None)
         chat_context = data.get("chatContext")
         user_id = data.get("userId")
         created_by = data.get("createdBy")
@@ -54,12 +56,13 @@ def process_document():
             }
         )
         
-        # Return response
+        # Return response to NestJS Server
         return jsonify({
             "statusCode": 200,
             "message": "성공했습니다",
             "data": {
                 "documentId": document_id,
+                "organizationId": orangization_id,
                 "title": title,
                 "document": document_text,
                 "userId": user_id,

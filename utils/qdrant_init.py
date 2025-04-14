@@ -5,7 +5,7 @@ import requests
 # Add the parent directory to sys.path to access config
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from config import QDRANT_HOST, QDRANT_PORT, QDRANT_COLLECTION_NAME, QDRANT_API_KEY
+from config import QDRANT_HOST, QDRANT_PORT, QDRANT_COLLECTION_NAME, QDRANT_API_KEY, QD
 
 # Define the full URL for Qdrant API
 qdrant_url = f"http://{QDRANT_HOST}:{QDRANT_PORT}/collections/{QDRANT_COLLECTION_NAME}"
@@ -14,7 +14,7 @@ qdrant_url = f"http://{QDRANT_HOST}:{QDRANT_PORT}/collections/{QDRANT_COLLECTION
 collection_payload = {
     "vector_size": 1536,  # Typically 1536 for OpenAI embeddings, adjust as necessary
     "distance": "Cosine",  # Or other distance metric like Euclidean or DotProduct
-}
+}   
 
 # Create the collection
 response = requests.put(
