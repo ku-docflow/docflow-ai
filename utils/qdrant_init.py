@@ -27,6 +27,6 @@ response = requests.put(
 
 # Check if the collection was created successfully
 if response.status_code == 200:
-    print(f"Collection '{QDRANT_COLLECTION_NAME}' created successfully.")
+    print(f"Collection '{QDRANT_COLLECTION_NAME}' created successfully.")   
 else:
     print(f"Failed to create collection. Error: {response.text}")

@@ -84,6 +84,7 @@ def generate_document_summary(chat_context: str, category: str) -> dict:
     else:
         doc_style = "회의록"
     
+    # 최종 합의된 내용을 출력하도록
     prompt = PromptTemplate(
         input_variables=["chat_context", "doc_style"],
         template=(
