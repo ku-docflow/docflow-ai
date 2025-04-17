@@ -23,7 +23,7 @@ def store_document_embedding(document_id: str, payload: Dict) -> None:
         
 
         # Combine title and summary for embedding
-        combined_text = f"{payload.get('title', '')} {payload.get('summary', '')}".strip()
+        combined_text = f"{payload.get('title', '')} {payload.get('document', '')}".strip()
         
         # Compute the embedding vector
         vector = embeddings_model.embed_query(combined_text)

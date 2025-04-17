@@ -17,15 +17,6 @@ def extract_keywords_and_category(chat_context: str) -> dict:
     """
     Extract keywords and determine the category (DEV_DOC or MEETING_DOC) from the input chat context.
     This function utilizes an LLM chain with a custom prompt.
-    
-    Args:
-        chat_context (str): The input text to analyze.
-    
-    Returns:
-        dict: A dictionary with 'keywords' (list) and 'category' (str).
-    
-    Raises:
-        Exception: If the LLM call or JSON parsing fails.
     """
     # Define a prompt template to guide the LLM
     prompt_template = PromptTemplate(

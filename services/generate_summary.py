@@ -16,16 +16,6 @@ def generate_document_summary(chat_context: str, category: str) -> dict:
     """
     Generate a summary and create a full document from the chat context.
     The document style is adjusted based on the category.
-    
-    Args:
-        chat_context (str): The input text to summarize.
-        category (str): The document category (DEV_DOC or MEETING_DOC).
-    
-    Returns:
-        dict: A dictionary with 'title', 'summary', and 'document'.
-    
-    Raises:
-        Exception: If the LLM call or JSON parsing fails.
     """
     # Choose document style based on category
     if category == CATEGORY.DEV_DOC:

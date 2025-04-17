@@ -62,6 +62,7 @@ def process_document():
             {
                 "title": title,
                 "summary": summary,
+                "document": full_document,
                 "userId": user_id,
                 "createdBy": created_by,
                 "keywords": keywords,
@@ -84,7 +85,6 @@ def process_document():
                 "userId": user_id,
                 "createdBy": created_by,
                 "category": category,
-                "OrganizationId": orangization_id,
                 "createdAt": created_at
             }
         })
