@@ -16,9 +16,7 @@ llm = ChatOpenAI(
 def extract_keywords_and_category(chat_context: str) -> dict:
     """
     Extract keywords and determine the category (DEV_DOC or MEETING_DOC) from the input chat context.
-    This function utilizes an LLM chain with a custom prompt.
     """
-    # Define a prompt template to guide the LLM
     prompt_template = PromptTemplate(
         input_variables=["chat_context"],
         template=(
@@ -31,8 +29,8 @@ def extract_keywords_and_category(chat_context: str) -> dict:
 
     formatted_prompt = prompt_template.format(
         chat_context=chat_context,
-        dev=CATEGORY.DEV_DOC,  # Dynamically pass dev category
-        meeting=CATEGORY.MEETING_DOC  # Dynamically pass meeting category
+        dev=CATEGORY.DEV_DOC,
+        meeting=CATEGORY.MEETING_DOC 
     )
     
     try:
