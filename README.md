@@ -46,7 +46,7 @@
       conda install --yes --file requirements.txt
      ```
 
-2. **환경 변수 설정**
+2. 환경 변수 설정
 
    - 프로젝트 루트 디렉토리에 `.env.example` 파일 내용을 토대로 `.env` 파일 생성
      ```
@@ -63,11 +63,16 @@
    - `PORT` : Flask 포트번호 설정 (macOS환경에서는 5000번대 포트 사용 불가)
    - `LANGCHAIN_MODEL=gpt-4o-mini-2024-07-18`로 설정하는 것을 권장
 
-3. **서비스 실행**
+3. 서비스 실행
    - Flask 서버 실행
      ```bash
      python3 app.py
      ```
+4. Qdrant DB Collection 자동 생성됐는 지 확인
+   - 아래 링크에서 collection 생성 여부 확인
+   ```
+    http://localhost:6333/dashboard#/collections
+   ```
 
 ## API Testing
 
