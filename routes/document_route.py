@@ -22,11 +22,11 @@ def process_document():
     """
     try:
         # Extract and validate JSON input
+        document_id = int(data.get("documentId"))
+        organization_id = int(data.get("organizationId"))
+        user_id = int(data.get("userId"))
         data = request.get_json(force=True)
-        document_id = data.get("documentId")
-        orangization_id = data.get("organizationId", None)
         chat_context = data.get("chatContext")
-        user_id = data.get("userId")
         created_by = data.get("createdBy")
         created_at = data.get("createdAt", None)
         
@@ -48,7 +48,7 @@ def process_document():
             category,
             created_at,
             created_by,
-            orangization_id
+            organization_id
         )
 
         # LLM Call 3: Generate summary and document content based on category
@@ -67,7 +67,7 @@ def process_document():
                 "createdBy": created_by,
                 "keywords": keywords,
                 "category": category,
-                "OrganizationId": orangization_id,
+                "OrganizationId": organization_id,
                 "createdAt": created_at
             }
         )
@@ -78,7 +78,7 @@ def process_document():
             "message": "성공했습니다",
             "data": {
                 "documentId": document_id,
-                "organizationId": orangization_id,
+                "organizationId": organization_id,
                 "title": title,
                 "document": full_document,
                 "summary": summary,

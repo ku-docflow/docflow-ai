@@ -5,12 +5,11 @@ from config import PORT
 
 def create_app():
     app = Flask(__name__)
-    # Register blueprint for document routes
+    # blueprint for API routes
     app.register_blueprint(document_bp, url_prefix="/api")
-    app.register_blueprint(search_bp, url_prefix="/api")    
+    app.register_blueprint(search_bp, url_prefix="/api")
     return app
 
 if __name__ == "__main__":
     app = create_app()
-    # In production, you would use a WSGI server instead of Flask's built-in server.
     app.run(host="0.0.0.0", port=PORT, debug=True)
