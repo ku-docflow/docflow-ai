@@ -10,15 +10,25 @@ logger = logging.getLogger(__name__)
 @search_bp.route("/search-document", methods=["POST"])
 def search_document():
     """
-    POST endpoint to perform RAG-style 문서 검색 및 응답 생성.
-    Expected JSON payload:
+    @검색봇 기능 : JSON 입력을 받아서 문서 요약 및 RAG 응답 생성하는 엔드포인트
+
+    JSON Payload 예시:
     {
         "references": [
-            { "title": "제목", "content": "Markdown 내용" },
-            { "title": "제목", "content": "Markdown 내용" },
-            { "title": "제목", "content": "Markdown 내용" }
+            {"title": "문서 제목 1", "content": "문서 내용 1"},
+            {"title": "문서 제목 2", "content": "문서 내용 2"},
+            {"title": "문서 제목 3", "content": "문서 내용 3"}
         ],
-        "userQuery": "질문 텍스트"
+        "userQuery": "사용자 질문"
+    }
+    
+    응답 예시:
+    {
+        "statusCode": 200,
+        "message": "성공했습니다",
+        "data": {
+            "ragResponse": "RAG 응답 내용"
+        }
     }
     """
     try:

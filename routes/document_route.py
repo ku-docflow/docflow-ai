@@ -9,23 +9,41 @@ document_bp = Blueprint("document", __name__)
 @document_bp.route("/process-document", methods=["POST"])
 def process_document():
     """
-    POST endpoint to process a document.
-    Expected JSON payload:
+    @생성봇 기능 : JSON 입력을 받아서 문서 생성, 요약, 키워드 추출 및 Qdrant에 저장하는 엔드포인트
+
+    JSON Payload 예시:
     {
-      "documentId": "uuid",
-      "organizationId": "organization-id",
-      "chatContext": "text with chat messages",
-      "userId": "user-id",
-      "createdBy": "author name"
-      "createdAt": "timestamp"
+        "documentId": 123,
+        "organizationId": 456,
+        "userId": 789,
+        "chatContext": "여기에 대화 내용이 들어갑니다.",
+        "createdBy": "사용자 이름",
+        "createdAt": "2023-10-01T12:00:00Z"
+    }
+    
+    응답 예시:
+    {
+        "statusCode": 200,
+        "message": "성공했습니다",
+        "data": {
+            "documentId": 123,
+            "organizationId": 456,
+            "title": "문서 제목",
+            "document": "문서 내용",
+            "summary": "문서 요약",
+            "userId": 789,
+            "createdBy": "사용자 이름",
+            "category": "문서 카테고리",
+            "createdAt": "2023-10-01T12:00:00Z"
+        }
     }
     """
     try:
         # Extract and validate JSON input
+        data = request.get_json(force=True)
         document_id = int(data.get("documentId"))
         organization_id = int(data.get("organizationId"))
-        user_id = int(data.get("userId"))
-        data = request.get_json(force=True)
+        user_id = data.get("userId")
         chat_context = data.get("chatContext")
         created_by = data.get("createdBy")
         created_at = data.get("createdAt", None)
