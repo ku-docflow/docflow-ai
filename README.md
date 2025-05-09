@@ -43,7 +43,7 @@
 
    - `requirements.txt` 파일을 사용하여 필요한 Python 패키지를 설치:
      ```bash
-      conda install --yes --file requirements.txt
+      pip3 install requirements.txt
      ```
 
 2. 환경 변수 설정
