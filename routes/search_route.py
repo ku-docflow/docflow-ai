@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 import logging
 from services import document_service, summary_service, qdrant_service
 from utils.error_handler import handle_error
-from prompts.prompts import summary_prompt, answer_prompt
+from prompts.prompts import summary_prompt, answer_prompt, without_docs_answer_prompt
 
 search_bp = Blueprint("search", __name__)
 logger = logging.getLogger(__name__)
@@ -37,47 +37,49 @@ def search_document():
         references = data.get("references")
         user_query = data.get("userQuery")
 
-        if not references or not user_query:
+        if not user_query:
             return handle_error(
-                "Missing Fields",
-                "references 또는 userQuery가 누락되었습니다.",
+                "Missing Field",
+                "userQuery가 누락되었습니다.",
                 400
             )
 
-        if len(references) != 3:
-            return handle_error(
-                "Invalid References",
-                "3개의 참조 문서를 제공해야 합니다.",
-                400
-            )
 
         # 2) 문서별 요약 생성
-        summarized_docs = []
-        for ref in references:
-            title = ref.get("title")
-            content = ref.get("content")
+        if references:
+            summarized_docs = []
+            for ref in references:
+                title = ref.get("title")
+                content = ref.get("content")
 
-            if not title or not content:
-                return handle_error(
-                    "Invalid Reference Item",
-                    "각 참조에는 title과 content가 모두 포함되어야 합니다.",
-                    400
+                if not title or not content:
+                    return handle_error(
+                        "Invalid Reference Item",
+                        "reference에는 title과 content가 모두 포함되어야 합니다.",
+                        400
+                    )
+
+                summary = summary_service.summarize_content(
+                    content.strip(),
+                    summary_prompt
                 )
+                summarized_docs.append(f"# {title}\n{summary}")
 
-            summary = summary_service.summarize_content(
-                content.strip(),
-                summary_prompt
+            # 3) 요약된 문서 합치고 RAG 응답 생성
+            combined_summary = "\n\n".join(summarized_docs)
+            rag_response = document_service.answer_question_with_summary(
+                combined_summary,
+                user_query.strip(),
+                answer_prompt
             )
-            summarized_docs.append(f"# {title}\n{summary}")
 
-        # 3) 요약된 문서 합치고 RAG 응답 생성
-        combined_summary = "\n\n".join(summarized_docs)
-        rag_response = document_service.answer_question_with_summary(
-            combined_summary,
-            user_query.strip(),
-            answer_prompt
-        )
+        else:
+            rag_response = document_service.answer_question_without_docs(
+                user_query.strip(),
+                without_docs_answer_prompt
+            )
 
+       
         # 4) 결과 반환
         return jsonify({
             "statusCode": 200,

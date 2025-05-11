@@ -21,7 +21,6 @@ def store_document_embedding(document_id: str, payload: Dict) -> None:
             dimensions=1024
         )
         
-
         # Combine title and summary for embedding
         combined_text = f"{payload.get('title', '')} {payload.get('document', '')}".strip()
         
