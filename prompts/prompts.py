@@ -15,7 +15,7 @@ dev_doc_prompt = PromptTemplate.from_template("""
 
 ## 3. 최종 합의 기술
 채팅 로그 내 모든 당사자가 최종적으로 합의한 기술 스택 또는 접근 방식에 대해 상세히 기술합니다.
-    
+
 *최종 합의 내용*
 
 ## 4. 목표
@@ -105,6 +105,7 @@ meeting_doc_prompt = PromptTemplate.from_template("""
 - **예정 일시:** YYYY-MM-DD HH:MM
 - **예정 안건:** [예정된 주요 주제 또는 질문]
 """)
+
 
 summary_prompt = PromptTemplate.from_template("""
 당신은 전문 기술 문서를 요약하는 한국어 요약 전문가입니다.

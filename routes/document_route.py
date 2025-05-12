@@ -85,7 +85,7 @@ def process_document():
                 "createdBy": created_by,
                 "keywords": keywords,
                 "category": category,
-                "OrganizationId": organization_id,
+                "organizationId": organization_id,
                 "createdAt": created_at
             }
         )

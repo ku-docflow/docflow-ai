@@ -7,7 +7,7 @@ from prompts.prompts import dev_doc_prompt, meeting_doc_prompt
 llm = ChatOpenAI(
     api_key=OPENAI_API_KEY,
     model_name=LANGCHAIN_MODEL,
-    temperature=0.3
+    temperature=0.1
 )
 
 def generate_document(chat_context, category, created_at, created_by, organization_id):
