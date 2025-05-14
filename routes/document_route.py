@@ -41,8 +41,8 @@ def process_document():
     try:
         # Extract and validate JSON input
         data = request.get_json(force=True)
-        document_id = int(data.get("documentId"))
-        organization_id = int(data.get("organizationId"))
+        document_id = data.get("documentId")
+        organization_id = data.get("organizationId")
         user_id = data.get("userId")
         chat_context = data.get("chatContext")
         created_by = data.get("createdBy")
