@@ -24,7 +24,6 @@ def save_document():
         created_by = data.get("createdBy")
         created_at = data.get("createdAt")
 
-
         # Step 2: Generate and extract keywords and category
         keywords_category = extract_keyword.extract_keywords_and_category(chat_context)
         keywords = keywords_category.get("keywords")
