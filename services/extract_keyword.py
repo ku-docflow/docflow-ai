@@ -1,4 +1,3 @@
-# backend/services/llm_service.py
 import os
 import logging
 from langchain_community.chat_models import ChatOpenAI
@@ -20,10 +19,11 @@ def extract_keywords_and_category(chat_context: str) -> dict:
     prompt_template = PromptTemplate(
         input_variables=["chat_context"],
         template=(
-            "아래 내용을 기반으로 핵심 키워드를 추출하고, 기술문서이면 '{dev}', 회의록이면 '{meeting}'로 카테고리를 분류하세요.\n"
-            "내용: {chat_context}\n"
-            "출력 형식 (JSON): {{\"keywords\": [키워드 목록], \"category\": \"{dev}\" | \"{meeting}\"}}\n"
-            "예시: {{\"keywords\": [\"API\", \"JWT\"], \"category\": \"{dev}\"}}."
+            "다음 내용을 기반으로 핵심 키워드를 추출하고, 기술문서면 '{dev}', 회의록이면 '{meeting}'로 분류하세요.\n"
+            "- 반드시 JSON 형식만 출력하세요.\n"
+            "- 설명 없이 출력만 하세요.\n"
+            "- 예: {{\"keywords\": [\"API\", \"JWT\"], \"category\": \"{dev}\"}}\n\n"
+            "내용:\n{chat_context}"
         )
     )
 

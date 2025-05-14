@@ -52,7 +52,7 @@ def store_document_embedding(document_id: str, payload: Dict) -> None:
                 "keywords": payload.get("keywords"),
                 "category": payload.get("category"),
                 "createdAt": payload.get("createdAt"),
-                "organizationId": payload.get("OrganizationId"),
+                "organizationId": payload.get("organizationId"),
             }
         )
         
