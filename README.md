@@ -118,3 +118,8 @@ MOCK DATA :
   "createdAt": "2025-04-14T10:32:00+09:00"
 }
 ```
+
+## 
+
+- Modularize chat context.
+- Scenario testing.
