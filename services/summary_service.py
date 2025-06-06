@@ -10,4 +10,3 @@ def summarize_content(content: str, prompt_template: str) -> str:
     prompt = prompt_template.format(content=content.strip())
     result = llm(prompt)
     return result.strip()
-

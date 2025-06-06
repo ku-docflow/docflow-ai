@@ -7,7 +7,7 @@ from config import OPENAI_API_KEY, LANGCHAIN_MODEL, CATEGORY
 llm = ChatOpenAI(
     api_key=OPENAI_API_KEY,
     model_name=LANGCHAIN_MODEL,
-    temperature=0,
+    temperature=0.1,
 )
 
 # 2. JSON Schema 정의

@@ -96,3 +96,4 @@ def search_document():
             "RAG 응답 생성에 실패했습니다.",
             500
         )
+
