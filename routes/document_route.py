@@ -49,7 +49,7 @@ def process_document():
         created_at = data.get("createdAt", None)
         
         if not all([document_id, chat_context, user_id, created_by, created_at]):
-            return handle_error("Missing Fields","필수 필드가 누락되었습니다.", 400)
+            return handle_error("Missing Fields","생성봇 필수 필드가 누락되었습니다.", 400)
         
         # LLM Call 1: Keyword extraction and category classification
         keywords_category = extract_keyword.extract_keywords_and_category(chat_context)
