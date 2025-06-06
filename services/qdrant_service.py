@@ -1,5 +1,3 @@
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 import logging
 from typing import Dict
 import os
@@ -9,6 +7,9 @@ from qdrant_client.http import models
 from langchain_openai import OpenAIEmbeddings
 from config import QDRANT_URL, QDRANT_COLLECTION_NAME
 from utils.error_handler import handle_error
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 
 def get_client() -> QdrantClient:
     """
