@@ -6,17 +6,16 @@ from config import OPENAI_API_KEY, LANGCHAIN_MODEL, CATEGORY
 import json
 from utils.error_handler import handle_error
 
-
+# LLM 인스턴스 생성. temperature를 낮춰서 답변 생성
 llm = ChatOpenAI(
     api_key=OPENAI_API_KEY,
     model_name=LANGCHAIN_MODEL,
-    temperature=0.3
+    temperature=0.1
 )
 
 def generate_document_summary(chat_context: str, category: str) -> dict:
     """
-    Generate a summary and create a full document from the chat context.
-    The document style is adjusted based on the category.
+    Chat context 를 기반으로 문서 요약을 생성
     """
     # Choose document style based on category
     if category == CATEGORY.DEV_DOC:

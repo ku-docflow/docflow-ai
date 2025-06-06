@@ -14,8 +14,27 @@ logger = logging.getLogger(__name__)
 
 @save_bp.route("/save-document", methods=["POST"])
 def save_document():
+    """
+    @문서 저장 엔드포인트 : JSON 입력을 받아서 문서를 저장하고 요약 및 키워드 추출을 수행하는 엔드포인트
+    
+    JSON Payload 예시:
+    {
+        "documentId": 123,
+        "organizationId": 456,
+        "content": "문서 내용",
+        "userId": 789,
+        "createdBy": "사용자 이름",
+        "createdAt": "2023-10-01T12:00:00Z"
+    }
+
+    응답 예시:
+    {
+        "statusCode": 200,
+        "message": "성공했습니다"
+    }
+    """
     try:
-        # Step 1: Parse and validate request data
+        # 1. reqeust 데이터 파싱
         data = request.get_json(force=True)
         logger.info(f"Received request data: {data}")
 
@@ -28,19 +47,19 @@ def save_document():
 
         logger.info(f"Parsed data: document_id={document_id}, organization_id={organization_id}, user_id={user_id}")
 
-        # Step 2: Generate and extract keywords and category
+        # 2. 키워드 및 카테고리 추출
         keywords_category = extract_keyword.extract_keywords_and_category(chat_context)
         keywords = keywords_category.get("keywords")
         category = keywords_category.get("category")
         logger.info(f"Extracted keywords: {keywords}, category: {category}")
 
-        # Step 3: Generate summary using LangChain
+        # 3. summary 생성
         summary_doc = generate_summary.generate_document_summary(chat_context, category)
         title = summary_doc.get("title")
         summary = summary_doc.get("summary")
         logger.info(f"Generated summary: title={title}")
 
-        # Step 4: Store document in Qdrant
+        # 4. qdrant에 문서 임베딩 저장
         qdrant_service.store_document_embedding(
             document_id,
             {
@@ -57,7 +76,7 @@ def save_document():
         )
         logger.info("Successfully stored document in Qdrant")
 
-        # Step 5: Return success response
+        # 5. 성공했을 경우 응답
         return jsonify({
             "statusCode": 200,
             "message": "성공했습니다",

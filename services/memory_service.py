@@ -22,7 +22,7 @@ class MemoryService:
         self._ensure_collection_exists()
 
     def _ensure_collection_exists(self):
-        """Ensure the memory collection exists in Qdrant."""
+        """qdrant에 지정된 컬렉션이 존재하는지 확인하고, 없으면 생성"""
         try:
             collections = self.qdrant_client.get_collections().collections
             collection_names = [collection.name for collection in collections]
@@ -31,11 +31,11 @@ class MemoryService:
                 self.qdrant_client.create_collection(
                     collection_name=self.collection_name,
                     vectors_config=models.VectorParams(
-                        size=1024,  # Size for text-embedding-3-large
+                        size=1024,
                         distance=models.Distance.COSINE
                     )
                 )
-                logger.info(f"Created new collection: {self.collection_name}")
+                logger.info(f"신규 컬렉션 생성: {self.collection_name}")
         except Exception as e:
             return handle_error(
                 "Error ensuring collection exists",
@@ -45,15 +45,7 @@ class MemoryService:
 
     def store_interaction(self, query: str, response: str, metadata: Optional[Dict] = None) -> str:
         """
-        Store a query-response interaction in memory.
-        
-        Args:
-            query: The user's query
-            response: The system's response
-            metadata: Additional metadata to store
-            
-        Returns:
-            str: The ID of the stored interaction
+        querty와 response를 저장하고, 메타데이터를 포함하여 Qdrant에 상호작용 기록을 저장
         """
         try:
             # Create interaction record
@@ -93,14 +85,7 @@ class MemoryService:
 
     def retrieve_relevant_memories(self, query: str, limit: int = 3) -> List[Dict]:
         """
-        Retrieve relevant past interactions based on semantic similarity.
-        
-        Args:
-            query: The current query to find relevant memories for
-            limit: Maximum number of memories to retrieve
-            
-        Returns:
-            List[Dict]: List of relevant interactions
+        기존 상호작용에서 관련된 기억을 검색하고 반환
         """
         try:
             # Encode the query
@@ -125,13 +110,7 @@ class MemoryService:
 
     def format_memories_for_prompt(self, memories: List[Dict]) -> str:
         """
-        Format retrieved memories into a string suitable for inclusion in a prompt.
-        
-        Args:
-            memories: List of memory dictionaries
-            
-        Returns:
-            str: Formatted memory context
+        프롬프트에 사용할 수 있도록 string 형식으로 memories를 포맷
         """
         if not memories:
             return ""

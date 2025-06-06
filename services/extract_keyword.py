@@ -4,7 +4,7 @@ from langchain.prompts import PromptTemplate
 from config import OPENAI_API_KEY, LANGCHAIN_MODEL, CATEGORY
 from utils.error_handler import handle_error
 
-# 1. LLM 인스턴스 생성
+# 1. LLM 인스턴스 생성. temperature를 낮춰서 답변 생성
 llm = ChatOpenAI(
     api_key=OPENAI_API_KEY,
     model_name=LANGCHAIN_MODEL,
@@ -47,6 +47,7 @@ prompt_template = PromptTemplate(
 
 # 5. 함수 정의
 def extract_keywords_and_category(chat_context: str) -> dict:
+    """채팅 로그를 분석하여 핵심 키워드와 카테고리를 추출"""
     formatted_prompt = prompt_template.format(chat_context=chat_context)
 
     try:

@@ -5,6 +5,8 @@ from config import OPENAI_API_KEY, LANGCHAIN_MODEL
 from prompts.prompts import dev_doc_prompt, meeting_doc_prompt
 from utils.error_handler import handle_error
 
+
+# LLM 인스턴스 생성. temperature를 낮춰서 답변 생성
 llm = ChatOpenAI(
     api_key=OPENAI_API_KEY,
     model_name=LANGCHAIN_MODEL,
@@ -12,6 +14,7 @@ llm = ChatOpenAI(
 )
 
 def generate_document(chat_context, category, created_at, created_by, organization_id):
+    """chat context와 category를 기반으로 문서를 생성. meeting_doc 또는 dev_doc의 프롬프트를 구분함"""
     try:
         if category == "MEETING_DOC":
             formatted_prompt = meeting_doc_prompt.format(

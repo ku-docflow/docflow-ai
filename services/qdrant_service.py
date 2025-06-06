@@ -12,10 +12,7 @@ from utils.error_handler import handle_error
 
 def get_client() -> QdrantClient:
     """
-    Get a Qdrant client instance.
-    
-    Returns:
-        QdrantClient: An initialized Qdrant client
+    qdrant 클라이언트 초기화
     """
     return QdrantClient(
         url=QDRANT_URL,
@@ -24,7 +21,7 @@ def get_client() -> QdrantClient:
 
 def store_document_embedding(document_id: str, payload: Dict) -> None:
     """
-    Store a document embedding into Qdrant with the required structure.
+    document_id를 기반으로 Qdrant에 문서 임베딩을 저장
     """
     try:
         # Initialize embeddings model
