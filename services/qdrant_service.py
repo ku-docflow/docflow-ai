@@ -10,6 +10,18 @@ from qdrant_client.http import models
 from langchain_openai import OpenAIEmbeddings
 from config import QDRANT_URL, QDRANT_COLLECTION_NAME
 
+def get_client() -> QdrantClient:
+    """
+    Get a Qdrant client instance.
+    
+    Returns:
+        QdrantClient: An initialized Qdrant client
+    """
+    return QdrantClient(
+        url=QDRANT_URL,
+        prefer_grpc=True,
+    )
+
 def store_document_embedding(document_id: str, payload: Dict) -> None:
     """
     Store a document embedding into Qdrant with the required structure.

@@ -1,11 +1,14 @@
 from flask import Blueprint, request, jsonify
 import logging
-from services import document_service, summary_service, qdrant_service
+from services import document_service, summary_service, qdrant_service, memory_service
 from utils.error_handler import handle_error
 from prompts.prompts import summary_prompt, answer_prompt, without_docs_answer_prompt
 
 search_bp = Blueprint("search", __name__)
 logger = logging.getLogger(__name__)
+
+# Initialize memory service
+memory_service_instance = memory_service.MemoryService(qdrant_service.get_client())
 
 @search_bp.route("/search-document", methods=["POST"])
 def search_document():
@@ -44,8 +47,11 @@ def search_document():
                 400
             )
 
+        # 2) 관련 메모리 검색
+        relevant_memories = memory_service_instance.retrieve_relevant_memories(user_query)
+        memory_context = memory_service_instance.format_memories_for_prompt(relevant_memories)
 
-        # 2) 문서별 요약 생성
+        # 3) 문서별 요약 생성
         if references:
             summarized_docs = []
             for ref in references:
@@ -65,12 +71,13 @@ def search_document():
                 )
                 summarized_docs.append(f"# {title}\n{summary}")
 
-            # 3) 요약된 문서 합치고 RAG 응답 생성
+            # 4) 요약된 문서 합치고 RAG 응답 생성
             combined_summary = "\n\n".join(summarized_docs)
             rag_response = document_service.answer_question_with_summary(
                 combined_summary,
                 user_query.strip(),
-                answer_prompt
+                answer_prompt,
+                memory_context=memory_context
             )
 
         else:
@@ -79,8 +86,14 @@ def search_document():
                 without_docs_answer_prompt
             )
 
+        # 5) 상호작용 저장
+        memory_service_instance.store_interaction(
+            query=user_query,
+            response=rag_response,
+            metadata={"has_references": bool(references)}
+        )
        
-        # 4) 결과 반환
+        # 6) 결과 반환
         return jsonify({
             "statusCode": 200,
             "message": "성공했습니다",
