@@ -7,6 +7,7 @@ import numpy as np
 from langchain_openai import OpenAIEmbeddings
 import logging
 import uuid
+from utils.error_handler import handle_error
 
 logger = logging.getLogger(__name__)
 
@@ -36,8 +37,11 @@ class MemoryService:
                 )
                 logger.info(f"Created new collection: {self.collection_name}")
         except Exception as e:
-            logger.error(f"Error ensuring collection exists: {str(e)}")
-            raise
+            return handle_error(
+                "Error ensuring collection exists",
+                f"Failed to ensure collection {self.collection_name} exists: {str(e)}",
+                500
+            )
 
     def store_interaction(self, query: str, response: str, metadata: Optional[Dict] = None) -> str:
         """
@@ -81,8 +85,11 @@ class MemoryService:
             return interaction_id
             
         except Exception as e:
-            logger.error(f"Error storing interaction: {str(e)}")
-            raise
+            return handle_error(
+                "Error storing interaction",
+                f"Failed to store interaction: {str(e)}",
+                500
+            )
 
     def retrieve_relevant_memories(self, query: str, limit: int = 3) -> List[Dict]:
         """
@@ -110,8 +117,11 @@ class MemoryService:
             return [hit.payload for hit in search_result]
             
         except Exception as e:
-            logger.error(f"Error retrieving memories: {str(e)}")
-            return []
+            return handle_error(
+                "Error retrieving memories",
+                f"Failed to retrieve relevant memories: {str(e)}",
+                500
+            )
 
     def format_memories_for_prompt(self, memories: List[Dict]) -> str:
         """

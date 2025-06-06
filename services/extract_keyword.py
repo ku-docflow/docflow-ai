@@ -2,6 +2,7 @@ import logging
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from config import OPENAI_API_KEY, LANGCHAIN_MODEL, CATEGORY
+from utils.error_handler import handle_error
 
 # 1. LLM 인스턴스 생성
 llm = ChatOpenAI(
@@ -52,5 +53,8 @@ def extract_keywords_and_category(chat_context: str) -> dict:
         result = structured_llm.invoke(formatted_prompt)
         return result
     except Exception:
-        logging.exception("Error in extract_keywords_and_category")
-        raise RuntimeError("LLM 키워드/카테고리 추출 실패")
+        return handle_error(
+            "Error extracting keywords and category",
+            "키워드 및 카테고리 추출에 실패했습니다.",
+            500
+        )

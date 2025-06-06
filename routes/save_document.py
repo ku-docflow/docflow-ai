@@ -6,6 +6,7 @@ from langchain.chains.summarize import load_summarize_chain
 from langchain.llms import OpenAI
 from services import qdrant_service  # your custom service layer
 from services import extract_keyword, generate_summary
+from utils.error_handler import handle_error
 
 
 save_bp = Blueprint("save", __name__)
@@ -64,7 +65,5 @@ def save_document():
 
     except Exception as e:
         logger.exception("Failed to save document")
-        return jsonify({
-            "statusCode": 500,
-            "message": f"문서 저장 중 오류가 발생했습니다: {str(e)}"
-        }), 500
+        return handle_error("/process-document failed", "LLM 응답 생성에 실패했습니다.", 500)
+    

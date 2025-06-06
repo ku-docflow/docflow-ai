@@ -1,6 +1,7 @@
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 import logging
+from utils.error_handler import handle_error
 
 logger = logging.getLogger(__name__)
 llm = OpenAI(temperature=0)
@@ -36,8 +37,7 @@ def answer_question_with_summary(
         return response.strip()
         
     except Exception as e:
-        logger.error(f"Error generating answer: {str(e)}")
-        raise
+        return handle_error("Error generating answer with docs", 500)
 
 def answer_question_without_docs(user_query: str, prompt_template: str) -> str:
     """
@@ -48,5 +48,4 @@ def answer_question_without_docs(user_query: str, prompt_template: str) -> str:
         response = llm.invoke(prompt)
         return response.strip()
     except Exception as e:
-        logger.error(f"Error generating answer without docs: {str(e)}")
-        raise
+        return handle_error("Error generating answer without docs", 500)

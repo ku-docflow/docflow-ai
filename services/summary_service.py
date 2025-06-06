@@ -1,5 +1,6 @@
 from langchain.llms import OpenAI
 import logging
+from utils.error_handler import handle_error
 
 logger = logging.getLogger(__name__)
 
@@ -15,5 +16,8 @@ def summarize_content(content: str, prompt_template: str) -> str:
         result = llm.invoke(prompt)
         return result.strip()
     except Exception as e:
-        logger.error(f"Error summarizing content: {str(e)}")
-        raise
+        return handle_error(
+            "Error generating summary",
+            "문서 요약 생성에 실패했습니다.",
+            500
+        )

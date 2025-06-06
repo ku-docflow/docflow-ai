@@ -3,6 +3,7 @@ import logging
 from langchain_community.chat_models import ChatOpenAI
 from config import OPENAI_API_KEY, LANGCHAIN_MODEL
 from prompts.prompts import dev_doc_prompt, meeting_doc_prompt
+from utils.error_handler import handle_error
 
 llm = ChatOpenAI(
     api_key=OPENAI_API_KEY,
@@ -39,8 +40,8 @@ def generate_document(chat_context, category, created_at, created_by, organizati
 
     except Exception as e:
         logging.exception("문서 생성 중 오류 발생")
-        return {
-            "error": "Document Generation Error",
-            "message": str(e),
-            "status_code": 500
-        }
+        return handle_error(
+            "Error generating document",
+            "문서 생성에 실패했습니다.",
+            500
+        )

@@ -4,6 +4,7 @@ from langchain_community.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from config import OPENAI_API_KEY, LANGCHAIN_MODEL, CATEGORY
 import json
+from utils.error_handler import handle_error
 
 
 llm = ChatOpenAI(
@@ -48,4 +49,8 @@ def generate_document_summary(chat_context: str, category: str) -> dict:
         return result
     except Exception as e:
         logging.exception("Error in generate_document_summary")
-        raise Exception("LLM 문서 생성 실패") from e
+        return handle_error(
+            "Error generating document summary",
+            "문서 요약 생성에 실패했습니다.",
+            500
+        )

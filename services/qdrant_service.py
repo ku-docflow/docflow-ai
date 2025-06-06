@@ -1,14 +1,14 @@
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import logging
 from typing import Dict
 import os
 import sys
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
 from langchain_openai import OpenAIEmbeddings
 from config import QDRANT_URL, QDRANT_COLLECTION_NAME
+from utils.error_handler import handle_error
 
 def get_client() -> QdrantClient:
     """
@@ -78,4 +78,8 @@ def store_document_embedding(document_id: str, payload: Dict) -> None:
 
     except Exception as e:
         logging.exception("Error storing document in Qdrant")
-        raise Exception("문서 임베딩 저장 실패") from e
+        return handle_error(
+            "Error storing document in Qdrant",
+            f"Failed to store document with ID {document_id}: {str(e)}",
+            500
+        )
