@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
 import logging
 from datetime import datetime
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.chains.summarize import load_summarize_chain
-from langchain.llms import OpenAI
+from langchain_openai import OpenAI
 from services import qdrant_service  # your custom service layer
 from services import extract_keyword, generate_summary
 from utils.error_handler import handle_error

@@ -41,10 +41,11 @@ def answer_question_with_summary(
         
         # Generate response using the LLM with invoke method
         response = llm_with_docs.invoke(formatted_prompt)
-        return response.strip()
+        return response.content
         
     except Exception as e:
-        return handle_error("Error generating answer with docs", 500)
+        logger.exception("Error generating answer with docs")
+        return handle_error("Error generating answer with docs", "문서 기반 답변 생성에 실패했습니다.", 500)
 
 def answer_question_without_docs(user_query: str, prompt_template: str) -> str:
     """
@@ -53,6 +54,7 @@ def answer_question_without_docs(user_query: str, prompt_template: str) -> str:
     try:
         prompt = prompt_template.format(question=user_query)
         response = llm_without_docs.invoke(prompt)
-        return response.strip()
+        return response.content
     except Exception as e:
-        return handle_error("Error generating answer without docs", 500)
+        logger.exception("Error generating answer without docs")
+        return handle_error("Error generating answer without docs", "일반 답변 생성에 실패했습니다.", 500)

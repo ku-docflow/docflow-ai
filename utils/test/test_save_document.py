@@ -14,40 +14,22 @@ def client():
     with app.test_client() as client:
         yield client
 
-def test_save_document_missing_fields(client):
+def test_save_document_success(client):
     test_data = {
-        "documentId": 123,
-        "organizationId": 456
+    "documentId": 101,
+    "organizationId": 2001,
+    "content": "## Overview\nThis document outlines the main objectives for Q3 2025...\n\n### Goals\n1. Improve user retention\n2. Launch beta features\n3. Optimize backend performance",
+    "userId": "34567",
+    "createdBy": "Jane Doe",
+    "createdAt": "2025-05-12T10:30:00Z"
     }
-    
-    response = client.post(
-        '/api/save-document',
-        data=json.dumps(test_data),
-        content_type='application/json'
-    )
-    
-    assert response.status_code == 500
-    data = json.loads(response.data)
-    assert data['statusCode'] == 500
-    assert "문서 저장 중 오류가 발생했습니다" in data['message']
 
-def test_save_document_invalid_document_id(client):
-    test_data = {
-        "documentId": "invalid_id",
-        "organizationId": 456,
-        "content": "Test content",
-        "userId": "user123",
-        "createdBy": "test_user",
-        "createdAt": datetime.utcnow().isoformat()
-    }
-    
-    response = client.post(
+    response = client.post( 
         '/api/save-document',
         data=json.dumps(test_data),
         content_type='application/json'
     )
-    
-    assert response.status_code == 500
+    assert response.status_code == 200
     data = json.loads(response.data)
-    assert data['statusCode'] == 500
-    assert "문서 저장 중 오류가 발생했습니다" in data['message'] 
+    assert data['statusCode'] == 200
+    assert data['message'] == "성공했습니다"

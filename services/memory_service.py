@@ -37,11 +37,13 @@ class MemoryService:
                 )
                 logger.info(f"신규 컬렉션 생성: {self.collection_name}")
         except Exception as e:
-            return handle_error(
+            error_response, _ = handle_error(
                 "Error ensuring collection exists",
                 f"Failed to ensure collection {self.collection_name} exists: {str(e)}",
                 500
             )
+            logger.error(error_response["message"])
+            raise Exception(error_response["message"])
 
     def store_interaction(self, query: str, response: str, metadata: Optional[Dict] = None) -> str:
         """
@@ -77,11 +79,13 @@ class MemoryService:
             return interaction_id
             
         except Exception as e:
-            return handle_error(
+            error_response, _ = handle_error(
                 "Error storing interaction",
                 f"Failed to store interaction: {str(e)}",
                 500
             )
+            logger.error(error_response["message"])
+            raise Exception(error_response["message"])
 
     def retrieve_relevant_memories(self, query: str, limit: int = 3) -> List[Dict]:
         """
@@ -102,11 +106,13 @@ class MemoryService:
             return [hit.payload for hit in search_result]
             
         except Exception as e:
-            return handle_error(
+            error_response, _ = handle_error(
                 "Error retrieving memories",
                 f"Failed to retrieve relevant memories: {str(e)}",
                 500
             )
+            logger.error(error_response["message"])
+            raise Exception(error_response["message"])
 
     def format_memories_for_prompt(self, memories: List[Dict]) -> str:
         """

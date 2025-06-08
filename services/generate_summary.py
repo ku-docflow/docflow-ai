@@ -1,6 +1,6 @@
 import os
 import logging
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from config import OPENAI_API_KEY, LANGCHAIN_MODEL, CATEGORY
 import json

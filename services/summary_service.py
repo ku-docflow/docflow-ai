@@ -1,4 +1,4 @@
-from langchain.llms import OpenAI
+from langchain_openai import OpenAI
 import logging
 from utils.error_handler import handle_error
 

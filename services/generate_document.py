@@ -1,6 +1,6 @@
 import os
 import logging
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from config import OPENAI_API_KEY, LANGCHAIN_MODEL
 from prompts.prompts import dev_doc_prompt, meeting_doc_prompt
 from utils.error_handler import handle_error
