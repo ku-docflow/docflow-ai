@@ -22,7 +22,7 @@ def mock_env_vars(monkeypatch):
 def mock_openai():
     with patch('langchain_openai.OpenAIEmbeddings') as mock_embeddings:
         mock_embeddings.return_value.embed_query.return_value = [0.1] * 1024
-        with patch('langchain.llms.OpenAI') as mock_llm:
+        with patch('langchain_openai.OpenAI') as mock_llm:
             mock_llm.return_value.invoke.return_value = "Mocked response"
             yield mock_llm
 
