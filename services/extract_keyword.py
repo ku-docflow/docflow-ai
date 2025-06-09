@@ -53,8 +53,15 @@ def extract_keywords_and_category(chat_context: str) -> dict:
     try:
         result = structured_llm.invoke(formatted_prompt)
         return result
-    except Exception:
-        return handle_error(
+    except Exception as e:
+        try:
+            fallback_result = {
+                "keywords": [],
+                "category": CATEGORY.DEV_DOC
+            }
+            return fallback_result
+        except Exception:
+            return handle_error(
             "Error extracting keywords and category",
             "키워드 및 카테고리 추출에 실패했습니다.",
             500
