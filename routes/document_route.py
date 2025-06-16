@@ -53,6 +53,9 @@ def process_document():
         
         # LLM Call 1: Keyword extraction and category classification
         keywords_category = extract_keyword.extract_keywords_and_category(chat_context)
+        if "error" in keywords_category:
+            return jsonify(keywords_category), keywords_category.get("status_code", 500)
+            
         keywords = keywords_category.get("keywords")
         category = keywords_category.get("category")
 
@@ -60,7 +63,6 @@ def process_document():
         
 
         # LLM Call 2: Generate Document
-
         full_document = generate_document.generate_document(
             chat_context,
             category,
@@ -68,9 +70,14 @@ def process_document():
             created_by,
             organization_id
         )
+        if isinstance(full_document, dict) and "error" in full_document:
+            return jsonify(full_document), full_document.get("status_code", 500)
 
         # LLM Call 3: Generate summary and document content based on category
         summary_doc = generate_summary.generate_document_summary(chat_context, category)
+        if isinstance(summary_doc, dict) and "error" in summary_doc:
+            return jsonify(summary_doc), summary_doc.get("status_code", 500)
+            
         title = summary_doc.get("title")
         summary = summary_doc.get("summary")
         
@@ -108,4 +115,5 @@ def process_document():
         })
     except Exception as e:
         logging.exception("Error processing document")
-        return handle_error("/process-document failed", "LLM 응답 생성에 실패했습니다.", 500)
+        error_response = handle_error("/process-document failed", "LLM 응답 생성에 실패했습니다.", 500)
+        return jsonify(error_response), 500

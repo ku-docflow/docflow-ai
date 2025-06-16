@@ -7,6 +7,7 @@ def handle_error(error_code: str, message: str, status_code: int):
     """
     response = {
         "error": error_code,
-        "message": message
+        "message": message,
+        "status_code": status_code
     }
-    return response, status_code
+    return response
