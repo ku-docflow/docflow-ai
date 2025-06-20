@@ -19,7 +19,6 @@ dev_doc_prompt = PromptTemplate.from_template("""
 [템플릿]
 # 적절한 개발 문서 제목 작성
                                               
-- **작성자:** {created_by}
 - **작성 일자:** {created_at}
 
 ## 1. 회의 요약
@@ -121,7 +120,6 @@ meeting_doc_prompt = PromptTemplate.from_template("""
 
 # 적절한 회의록 제목 작성. 단, 날짜만 포함되는 제목 작성은 피해주세요.
                                               
-- **작성자:** {created_by}
 - **작성 일자:** {created_at}
 
 ## 1. 회의 요약
