@@ -6,7 +6,6 @@ from config import PORT
 
 def create_app():
     app = Flask(__name__)
-    # blueprint for API routes
     app.register_blueprint(document_bp, url_prefix="/api")
     app.register_blueprint(search_bp, url_prefix="/api")
     app.register_blueprint(save_bp, url_prefix="/api")
