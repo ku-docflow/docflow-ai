@@ -21,14 +21,16 @@ def generate_document(chat_context, category, created_at, created_by, organizati
                 chat_context=chat_context,
                 created_at=created_at,
                 created_by=created_by,
-                organization_id=organization_id
+                organization_id=organization_id,
+                attendees = "Minjun Kim, Jimin Park, Seojun Park, Jisoo Lee" 
             )
         elif category == "DEV_DOC":
             formatted_prompt = dev_doc_prompt.format(
                 chat_context=chat_context,
                 created_at=created_at,
                 created_by=created_by,
-                organization_id=organization_id
+                organization_id=organization_id,
+                attendees = "Minjun Kim, Jimin Park, Seojun Park, Jisoo Lee" 
             )
         else:
             return {

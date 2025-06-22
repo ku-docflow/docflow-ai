@@ -44,7 +44,22 @@ def generate_document_summary(chat_context: str, category: str) -> dict:
     try:
         # Call the LLM
         response = llm.invoke(formatted_prompt).content
-        result = json.loads(response)
+        if not response or not response.strip():
+            logging.error("LLM returned empty response for summary generation.")
+            return handle_error(
+                "Empty LLM response",
+                "LLM이 응답을 반환하지 않았습니다.",
+                500
+            )
+        try:
+            result = json.loads(response)
+        except json.JSONDecodeError:
+            logging.error(f"LLM did not return valid JSON: {response}")
+            return handle_error(
+                "Invalid LLM response",
+                "LLM이 올바른 JSON을 반환하지 않았습니다.",
+                500
+            )
         return result
     except Exception as e:
         logging.exception("Error in generate_document_summary")

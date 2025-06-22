@@ -39,7 +39,7 @@ def save_document():
         logger.info(f"Received request data: {data}")
 
         document_id = int(data.get("documentId"))
-        organization_id = int(data.get("organizationId"))
+        organization_id = data.get("organizationId")
         chat_context = data.get("content")
         user_id = data.get("userId")
         created_by = data.get("createdBy")
